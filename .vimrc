@@ -110,3 +110,9 @@ augroup vimrc
  " restore statusline highlights on colorscheme update
  au Colorscheme * call <SID>StatusLineHighlights()
 augroup END
+
+" force statusline redrawing when entering command mode
+augroup redrawStatusLine
+  au!
+  autocmd CmdlineEnter : redrawstatus
+augroup END
