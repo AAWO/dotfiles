@@ -1,0 +1,8 @@
+[
+   {  // Checkout Commit
+      "button": "button1",
+      "count": 2,
+      "command": "git",
+      "args": {"argv": ["checkout", "$commit"]}
+   }
+]

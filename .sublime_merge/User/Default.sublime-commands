@@ -1,0 +1,31 @@
+[
+    {
+        "caption": "Cleanup Repo",
+        "command": "git",
+        "args": {"argv": ["gc"]}
+    },
+
+    {
+        "caption": "Refresh list of remote branches",
+        "command": "git",
+        "args": {"argv": ["remote", "update", "origin", "--prune"]}
+    },
+
+    {
+        "caption": "Undo last commit",
+        "command": "git",
+        "args": {"argv": ["reset", "--soft", "HEAD^"]}
+    },
+
+    {
+        "caption": "Undo last commit (hard)",
+        "command": "git",
+        "args": {"argv": ["reset", "--hard", "HEAD^"]}
+    },
+
+    {
+        "caption": "Merge Tag...",
+        "command": "git",
+        "args": {"argv": ["merge", "$select_tag"]}
+    }
+]

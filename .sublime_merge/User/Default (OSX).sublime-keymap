@@ -1,0 +1,7 @@
+[
+   {  // Checkout Commit
+      "keys": ["super+enter"],
+      "command": "git",
+      "args": {"argv": ["checkout", "$commit"]}
+   },
+]
