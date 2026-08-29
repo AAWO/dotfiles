@@ -1,0 +1,19 @@
+[  
+   // Override keybinds in "Case Conversion/Default.sublime-settings"
+   { "keys": ["ctrl+shift+-"], "command": "noop"}, // enable default 'jump_forward' keybind
+   { "keys": ["ctrl+shift+t"], "command": "toggle_snake_camel_pascal"},
+
+   // "select_lines" keybinds compatible with Windows
+   // { "keys": ["ctrl+alt+up"], "command": "select_lines", "args": {"forward": false} },
+   // { "keys": ["ctrl+alt+down"], "command": "select_lines", "args": {"forward": true} },
+
+   // "select_lines" keybinds compatible with Mac
+   { "keys": ["ctrl+shift+down"], "command": "select_lines", "args": {"forward": true} },
+   { "keys": ["ctrl+shift+up"], "command": "select_lines", "args": {"forward": false} },
+   // "swap_lines_*" keybinds compatible with Mac
+   { "keys": ["ctrl+super+up"], "command": "swap_line_up" },
+   { "keys": ["ctrl+super+down"], "command": "swap_line_down" },
+
+   // Insert Nums
+   { "keys": ["ctrl+alt+n"], "command": "prompt_insert_nums" },
+]

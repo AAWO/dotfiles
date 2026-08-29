@@ -1,0 +1,6 @@
+{
+
+	"output_directory": "build",
+	"copy_output_on_build": true,
+
+}

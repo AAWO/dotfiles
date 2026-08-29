@@ -1,0 +1,7 @@
+{
+   "enable_readtime"       : false,
+   "enable_count_words"    : true,
+   "enable_count_lines"    : true,
+   "enable_count_chars"    : false,
+   "enable_count_pages"    : false,
+}

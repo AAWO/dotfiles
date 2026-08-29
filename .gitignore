@@ -1,3 +1,8 @@
 .DS_Store
 *.sublime-project
 *.sublime-workspace
+
+# Sublime Text settings
+.sublime_text/User/sftp_servers*
+.sublime_text/User/SFTP.errors.log
+.sublime_text/User/OverrideAudit.status

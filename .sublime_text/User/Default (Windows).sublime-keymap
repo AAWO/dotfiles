@@ -1,0 +1,5 @@
+[  
+   // Override keybinds in "Case Conversion/Default.sublime-settings"
+   { "keys": ["ctrl+shift+-"], "command": "noop"}, // enable default 'jump_forward' keybind
+   { "keys": ["ctrl+shift+t"], "command": "toggle_snake_camel_pascal"}
+]

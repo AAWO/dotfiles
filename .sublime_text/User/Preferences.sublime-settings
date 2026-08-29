@@ -1,0 +1,225 @@
+{
+	"dictionary": "Packages/Dictionaries/Polish.dic",
+
+	// folder_exclude_patterns and file_exclude_patterns control which files
+	// are listed in folders on the side bar. These can also be set on a per-
+	// project basis.
+	"file_exclude_patterns":
+	[
+		"*.pyc",
+		"*.pyo",
+		"*.exe",
+		"*.dll",
+		"*.obj",
+		"*.o",
+		"*.a",
+		"*.lib",
+		"*.so",
+		"*.dylib",
+		"*.ncb",
+		"*.suo",
+		"*.pdb",
+		"*.idb",
+		".DS_Store",
+		"*.class",
+		"*.psd",
+		"*.db",
+		"*.sublime-workspace"
+	],
+
+	// List any packages to ignore here. When removing entries from this list,
+	// a restart may be required if the package contains plugins.
+	"ignored_packages":
+	[
+		"Vintage",
+	],
+
+	// Controls how the indent guides are drawn. Options may be combined, with
+	// valid options being:
+	//  - "draw_normal" - will draw plain indent guides for every indentation
+	//    group
+	//  - "draw_active" - will draw indent guides for the group
+	//    containing the caret in a different color
+	//  - "draw_active_single" - will draw the right-most indent guide in the
+	//    group containing the caret in a different color
+	//  - "solid" - can be combined with any of the draw_* options to draw
+	//    solid instead of stippled lines
+	"indent_guide_options":
+	[
+		"draw_normal",
+		"draw_active"
+	],
+
+	// Set to false to disable scrolling past the end of the buffer.
+	"scroll_past_end": true,
+
+	// Set to false to prevent line numbers being drawn in the gutter
+	"line_numbers": true,
+
+	// Set to false to hide the gutter altogether
+	"gutter": true,
+
+	// Allows tabs to scroll left and right, instead of simply shrinking
+	"enable_tab_scrolling": true,
+
+	// The number of spaces a tab is considered equal to
+	"tab_size": 3,
+
+	// When enabled, pressing tab will insert the best matching completion.
+	// When disabled, tab will only trigger snippets or insert a tab.
+	// Shift+tab can be used to insert an explicit tab when tab_completion is
+	// enabled.
+	"tab_completion": true,
+
+	// Set to true to insert spaces when tab is pressed
+	"translate_tabs_to_spaces": true,
+
+	// Set to false to disable detection of tabs vs. spaces on load
+	"detect_indentation": true,
+	
+	// Enable auto complete to be triggered automatically when typing.
+	"auto_complete": true,
+	
+	// Calculates indentation automatically when pressing enter
+	"auto_indent": true,
+
+	// Makes auto indent a little smarter, e.g., by indenting the next line
+	// after an if statement in C. Requires auto_indent to be enabled.
+	"smart_indent": true,
+
+	// Adds whitespace up to the first open bracket when indenting. Requires
+	// auto_indent to be enabled.
+	"indent_to_bracket": true,
+
+	// Highlights other occurrences of the currently selected text
+	"match_selection": true,
+
+	// Set to false to turn off the indentation guides.
+	"draw_indent_guides": true,
+
+	// Set to true to ensure the last line of the file ends in a newline
+	// character when saving
+	"ensure_newline_at_eof_on_save": true,
+
+	// If true, the copy and cut commands will operate on the current line
+	// when the selection is empty, rather than doing nothing.
+	"copy_with_empty_selection": false,
+
+	// Show the relative path to files in the title bar
+	"show_rel_path": true,
+
+
+	////////////////////////////////////////////////////////////
+	////                     HIGHLIGHT                      ////
+	////////////////////////////////////////////////////////////
+	// If enabled, will highlight any line with a caret
+	"highlight_line": true,
+
+	// If enabled, will highlight the gutter for any line with a caret
+	"highlight_gutter": true,
+
+	// If enabled, will highlight the line number in the gutter for any line
+	// with a caret depending on the color scheme
+	"highlight_line_number": true,
+
+	// Makes tabs with modified files more visible
+	"highlight_modified_tabs": true,
+
+	////////////////////////////////////////////////////////////
+	////                     STATUS BAR                     ////
+	////////////////////////////////////////////////////////////
+	// Controls what type of columns selection description ("Line X, Column Y"
+	// in the status bar) uses:
+	// - "virtual": Count virtual columns. Tabs count as their width in spaces.
+	// - "real": Count real columns. Tabs count as one column.
+	"selection_description_column_type": "virtual",
+	
+	// Display file encoding in the status bar
+	"show_encoding": true,
+
+	// Display line endings in the status bar
+	"show_line_endings": true,
+
+	// Display indentation in the status bar
+	"show_indentation": true,
+
+	// Display syntax in the status bar
+	"show_syntax": true,
+
+	////////////////////////////////////////////////////////////
+	////                         GIT                        ////
+	////////////////////////////////////////////////////////////
+	// Shows git repository information next to files in sidebar and in
+	// the status bar
+	"show_git_status": true,
+
+	// Display the git status in the status bar
+	"show_git_status_in_status_bar": true,
+
+	////////////////////////////////////////////////////////////
+	////                        THEME                       ////
+	////////////////////////////////////////////////////////////
+	"theme": "auto",
+	// Controls the "theme" when to "auto"
+	"dark_theme": "Default Dark.sublime-theme",
+	"light_theme": "Default.sublime-theme",
+
+	"color_scheme": "Monokai.sublime-color-scheme",
+	"added_words":
+	[
+		"dwukrotność",
+		"trójstanowych",
+		"trójstanowego",
+		"trójstanowym",
+		"trójstanowy",
+		"trójstanowa",
+		"trójstanowe",
+		"analogowo",
+		"trójstanowymi",
+		"estymaty",
+		"synthesizable",
+		"capacitive",
+		"testbench",
+		"instancjonować",
+		"instancjonuje",
+		"inicjalizacja",
+		"inicjalizację",
+		"inicjalizacji",
+		"inkrementacja",
+		"inkrementacją",
+		"inkrementacji",
+		"transceiver",
+		"transceivera",
+		"transceiverów",
+		"otwartoźródłowy",
+		"parametryzowalny",
+		"jitter",
+		"rekonfiguracja",
+		"rekonfiguracji",
+		"metastability",
+		"comparator",
+		"syntonization",
+		"nonmonotonicity",
+		"cyberbezpieczeństwo",
+		"cyberbezpieczeństwa",
+	],
+	/*"font_size": 13,*/
+	"update_check": true,
+	"font_size": 14,
+	"index_files": true,
+	"auto_complete_triggers":
+	[
+		{
+			"characters": "<",
+			"selector": "text.html, text.xml",
+		},
+		{
+			"rhs_empty": true,
+			"selector": "punctuation.accessor",
+		},
+		{
+			"characters": "\\",
+			"selector": "text.tex.latex",
+		}
+	],
+}

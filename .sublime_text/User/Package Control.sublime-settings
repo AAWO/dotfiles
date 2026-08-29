@@ -1,0 +1,34 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"AlignTab",
+		"BracketHighlighter",
+		"Case Conversion",
+		"Compare Side-By-Side",
+		"Dockerfile Syntax Highlighting",
+		"FindKeyConflicts",
+		"Git",
+		"Insert Nums",
+		"LaTeXTools",
+		"OverrideAudit",
+		"Package Control",
+		"PackageResourceViewer",
+		"rainbow_csv",
+		"Restructured Text (RST) Snippets",
+		"SDC Constraints",
+		"SFTP",
+		"SideBarEnhancements",
+		"SystemVerilog",
+		"Terminal",
+		"Tmux Syntax Highlight",
+		"Verilog",
+		"VHDL Mode",
+		"VimL",
+		"WordHighlight",
+		"WordingStatus",
+	],
+}

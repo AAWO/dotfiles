@@ -1,0 +1,11 @@
+{
+   "statusbar_modified_time": true,
+   "statusbar_modified_time_format": "%H:%M %d.%m.%Y",
+   "statusbar_modified_time_locale": "",
+
+   "statusbar_file_size": false,
+
+   "confirm_before_deleting": true,
+
+   "confirm_before_permanently_deleting": true
+}

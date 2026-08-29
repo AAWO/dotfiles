@@ -1,0 +1,12 @@
+[  
+   // Override keybinds in "Case Conversion/Default.sublime-settings"
+   { "keys": ["ctrl+shift+-"], "command": "noop"}, // enable default 'jump_forward' keybind
+   { "keys": ["ctrl+shift+t"], "command": "toggle_snake_camel_pascal"},
+
+   // Override SFTP keybinds
+   { "keys": ["super+ctrl+u","super+ctrl+d"], "command": "noop" },
+   { "keys": ["super+ctrl+u","super+ctrl+t"], "command": "sftp_sync_down" },
+
+   // cmd+T - new tab
+   { "keys": ["super+t"], "command": "new_file" }
+]
