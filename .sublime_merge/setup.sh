@@ -13,10 +13,10 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
    subl_path="$HOME/.config/sublime-merge/Packages"
 elif [[ "$OSTYPE" == "cygwin" ]]; then
    # Cygwin on Windows
-   subl_path="%APPDATA%\Sublime Text\Packages"
+   subl_path="%APPDATA%\Sublime Merge\Packages"
 elif [[ "$OSTYPE" == "msys" ]]; then
    # MinGW/Git Bash/msysGit Windows
-   subl_path="%APPDATA%\Sublime Text\Packages"
+   subl_path="%APPDATA%\Sublime Merge\Packages"
 else
    # Unknown or not supported
    echo "Unknown or not supported OS detected: $OSTYPE"
@@ -37,9 +37,9 @@ tgt_dir="$subl_path/User"
 
 # check if target User directory is empty
 if [ ! -z "$( ls -A "$tgt_dir" )" ]; then
-   echo "Directory '$tgt_dir' is not empty. Moving contents to '$SCRIPT_DIR/User_backup'." 
+   echo -e "Directory '$tgt_dir' is not empty.\nMoving contents to '$SCRIPT_DIR/User_backup'." 
    mv "$tgt_dir" "$SCRIPT_DIR/User_backup"
 fi
 
-echo "Creating a symlink: '$src_dir' -> '$tgt_dir'"
+echo -e "\nCreating a symlink: '$src_dir' -> '$tgt_dir'"
 ln -s "$src_dir" "$tgt_dir"
