@@ -1,8 +1,11 @@
 [
-   {  // Checkout Commit
+   {
+      // Checkout commit on double click on a commit in the commit table (middle column),
+      //  don't checkout on double click on a commit message (right column)
       "button": "button1",
       "count": 2,
       "command": "git",
-      "args": {"argv": ["checkout", "$commit"]}
-   }
+      "args": {"argv": ["checkout", "$commit"]},
+      "context": [{"key": "control", "operator": "equal", "operand": "commit_table"}]
+   },
 ]
