@@ -20,6 +20,9 @@ set expandtab     " expand tab to spaces
 " Show line at the cursor position
 set cursorline
 
+" Highlight all search matches
+set hlsearch
+
 " Minimum lines to keep above and below cursor when scrolling
 set scrolloff=3
 
