@@ -80,6 +80,51 @@ fun! <SID>StatusLinePathWidth(mode_name, flags, file_type, file_format, cursor_i
    return winwidth(0) - l:used - 2
 endfun
 
+" Shorten directory names progressively from left to right
+" Adds a trailing '~' to each abbreviated directory
+fun! StatusLineProgressivePath(path, maxwidth, levels) abort
+   " Preserve the original path if fits
+   if strdisplaywidth(a:path) <= a:maxwidth
+      return a:path
+   endif
+
+   let l:parts = split(a:path, '/', 1)
+
+   " Don't shorten a path without parent directories
+   if len(l:parts) < 2
+      return a:path
+   endif
+
+   " Shorten names from the highest directory toward the filename
+   " Only shorten a directory if this saves columns
+   for l:keep in a:levels
+      for l:i in range(0, len(l:parts) - 2)
+         " Leave `/`, `./` and `../` components untouched
+         if l:parts[l:i] ==# '' || l:parts[l:i] ==# '.' || l:parts[l:i] ==# '..'
+            continue
+         endif
+
+         let l:prefix = strcharpart(l:parts[l:i], 0, l:keep)
+         let l:short = l:prefix . '~'
+
+         " Skip if the name was not shortened or the replacement would not reduce the width
+         if l:prefix ==# l:parts[l:i] || strdisplaywidth(l:short) >= strdisplaywidth(l:parts[l:i])
+            continue
+         endif
+
+         let l:parts[l:i] = l:short
+         let l:result = join(l:parts, '/')
+
+         " Stop when the shortened path fits
+         if strdisplaywidth(l:result) <= a:maxwidth
+            return l:result
+         endif
+      endfor
+   endfor
+
+   return join(l:parts, '/')
+endfun
+
 " Render a single filename and a mode-colored label
 " Reduce the width if the window is too narrow
 fun! StatusLineRenderer() abort
@@ -123,7 +168,7 @@ fun! StatusLineRenderer() abort
 
    " 4. Shorten each directory name to (at most) three characters
    if strdisplaywidth(l:filename) > l:available
-      let l:filename = pathshorten(l:path, 3)
+      let l:filename = StatusLineProgressivePath(l:path, l:available, [3])
    endif
 
    " 5. Simplify the cursor position from [line/total] col: column to line:column.
@@ -143,11 +188,7 @@ fun! StatusLineRenderer() abort
 
    " 7. Shorten directory names to two or one character(s)
    if strdisplaywidth(l:filename) > l:available
-      let l:filename = pathshorten(l:path, 2)
-      " If two-character directory names still do not fit
-      if strdisplaywidth(l:filename) > l:available
-         let l:filename = pathshorten(l:path, 1)
-      endif
+      let l:filename = StatusLineProgressivePath(l:path, l:available, [3, 2, 1])
    endif
 
    " 8. Hide the cursor position
@@ -221,14 +262,12 @@ fun! StatusLineFilename(maxwidth) abort
    endif
 
    " Progressively shorten directories, keeping the full filename
-   for l:keep in [3, 2, 1]
-      let l:short = pathshorten(l:path, l:keep)
+   let l:short = StatusLineProgressivePath(l:path, l:limit, [3, 2, 1])
 
-      " Stop when an abbreviated directory path fits
-      if strdisplaywidth(l:short) <= l:limit
-         return l:short
-      endif
-   endfor
+   " Stop when an abbreviated directory path fits
+   if strdisplaywidth(l:short) <= l:limit
+      return l:short
+   endif
 
    " Don't display a filename if the window has zero free columns
    if l:limit == 0
@@ -236,7 +275,7 @@ fun! StatusLineFilename(maxwidth) abort
    endif
 
    " Add prefix '...' to the path suffix
-   " In windows narrower than 3 columns, display only '.' or '..'.
+   " In windows narrower than 3 columns, display only '.' or '..'
    let l:ellipsis = strpart('...', 0, min([3, l:limit]))
    let l:suffix_width = l:limit - strdisplaywidth(l:ellipsis)
    while strdisplaywidth(l:short) > l:suffix_width
