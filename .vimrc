@@ -45,7 +45,7 @@ let g:mode_colors = {
       \ 'r'      : 'StatusLineSectionR'
       \ }
 
-let g:currentmode={
+let g:currentmode = {
       \ 'n'      : 'NORMAL ',
       \ 'v'      : 'VISUAL ',
       \ 'V'      : 'V·Line ',
@@ -55,27 +55,194 @@ let g:currentmode={
       \ 'Rv'     : 'V·Replace ',
       \ 'c'      : 'COMMAND ',
       \ 't'      : 'TERMINAL '
-      \}
+      \ }
 
-fun! StatusLineRenderer()
-   let hl = '%#' . get(g:mode_colors, tolower(mode()), g:mode_colors.n) . '#'
+" Short mode labels for a narrow window
+let g:mode_abbreviations = {
+      \ 'n'      : ['NOR', 'N'],
+      \ 'v'      : ['VIS', 'V'],
+      \ 'V'      : ['V·L', 'VL'],
+      \ "\<C-V>" : ['V·B', 'VB'],
+      \ 'i'      : ['INS', 'I'],
+      \ 'R'      : ['REP', 'R'],
+      \ 'Rv'     : ['V·R', 'VR'],
+      \ 'c'      : ['CMD', 'C'],
+      \ 't'      : ['TER', 'T']
+      \ }
 
-   return hl
-      \  . ' ' . get(g:currentmode, mode())
-      \ . '%#StatusLine#'
-      \ . ' %{StatusLineFilename()}%#StatusLine#'
-      \ . (&modified ? ' [+]'  : '')
-      \ . (&readonly ? ' [RO]' : '')
-      \ . '%='
-      \ . ' '. (&filetype!=#''?&filetype:'none') . ' [' . (&fileencoding.'|') . &fileformat.'] '
-      \ . hl
-      \ . '[%l/%L] col: %2c'
+
+" Calculate the width occupied by all segments except the filename
+" Reserve exactly two columns for a space before and after the path
+fun! <SID>StatusLinePathWidth(mode_name, flags, file_type, file_format, cursor_info) abort
+   let l:mode_segment = empty(a:mode_name) ? '' : ' ' . a:mode_name . ' '
+   let l:used = strdisplaywidth(l:mode_segment . a:flags
+         \ . a:file_type . a:file_format . a:cursor_info)
+   return winwidth(0) - l:used - 2
 endfun
 
+" Render a single filename and a mode-colored label
+" Reduce the width if the window is too narrow
+fun! StatusLineRenderer() abort
+   let l:current_mode = mode()
+   let hl = '%#' . get(g:mode_colors, tolower(l:current_mode), g:mode_colors.n) . '#'
+   let l:mode_name = trim(get(g:currentmode, l:current_mode, l:current_mode))
+   let l:mode_abbreviations = get(g:mode_abbreviations, l:current_mode,
+         \ [strcharpart(l:mode_name, 0, 3), strcharpart(l:mode_name, 0, 1)])
+   let l:flags = (&modified ? '[+]' : '')
+         \ . (&readonly ? (&modified ? ' [RO]' : '[RO]') : '')
+   let l:file_type = ' ' . (&filetype !=# '' ? &filetype : 'none')
+   let l:file_format = ' [' . &fileencoding . '|' . &fileformat . '] '
+   let l:cursor_format = ' [%l/%L] col: %2c'
+   let l:cursor_info = ' [' . line('.') . '/' . line('$') . '] col: '
+         \ . printf('%2d', col('.'))
+   let l:path = StatusLinePath()
+   let l:filename = l:path
+   let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+         \ l:file_type, l:file_format, l:cursor_info)
 
-fun! StatusLineFilename()
-   if (&ft ==? 'netrw') | return '*' | endif
-   return substitute(expand('%'), '^' . getcwd() . '/\?', '', 'i')
+   " 1. Hide encoding and file format
+   if strdisplaywidth(l:filename) > l:available
+      let l:file_format = ''
+      let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+            \ l:file_type, l:file_format, l:cursor_info)
+   endif
+
+   " 2. Abbreviate the mode label to three characters
+   if strdisplaywidth(l:filename) > l:available
+      let l:mode_name = l:mode_abbreviations[0]
+      let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+            \ l:file_type, l:file_format, l:cursor_info)
+   endif
+
+   " 3. Hide the file type
+   if strdisplaywidth(l:filename) > l:available
+      let l:file_type = ''
+      let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+            \ l:file_type, l:file_format, l:cursor_info)
+   endif
+
+   " 4. Shorten each directory name to (at most) three characters
+   if strdisplaywidth(l:filename) > l:available
+      let l:filename = pathshorten(l:path, 3)
+   endif
+
+   " 5. Simplify the cursor position from [line/total] col: column to line:column.
+   if strdisplaywidth(l:filename) > l:available
+      let l:cursor_format = ' %l:%c'
+      let l:cursor_info = ' ' . line('.') . ':' . col('.')
+      let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+            \ l:file_type, l:file_format, l:cursor_info)
+   endif
+
+   " 6. Abbreviate the mode label to the minimum
+   if strdisplaywidth(l:filename) > l:available
+      let l:mode_name = l:mode_abbreviations[1]
+      let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+            \ l:file_type, l:file_format, l:cursor_info)
+   endif
+
+   " 7. Shorten directory names to two or one character(s)
+   if strdisplaywidth(l:filename) > l:available
+      let l:filename = pathshorten(l:path, 2)
+      " If two-character directory names still do not fit
+      if strdisplaywidth(l:filename) > l:available
+         let l:filename = pathshorten(l:path, 1)
+      endif
+   endif
+
+   " 8. Hide the cursor position
+   if strdisplaywidth(l:filename) > l:available
+      let l:cursor_format = ''
+      let l:cursor_info = ''
+      let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+            \ l:file_type, l:file_format, l:cursor_info)
+   endif
+
+   " 9: Hide modified/read-only markers
+   if strdisplaywidth(l:filename) > l:available
+      let l:flags = ''
+      let l:available = <SID>StatusLinePathWidth(l:mode_name, l:flags,
+            \ l:file_type, l:file_format, l:cursor_info)
+   endif
+
+   " 10: replace the start of the path with "..."
+   if strdisplaywidth(l:filename) > l:available
+      let l:filename = StatusLineFilename(max([0, l:available]))
+   endif
+
+   " Escape percent signs so filenames cannot become statusline formats
+   let l:filename = substitute(l:filename, '%', '%%', 'g')
+   let l:mode_segment = empty(l:mode_name) ? '' : ' ' . l:mode_name . ' '
+
+   return hl
+      \ . l:mode_segment
+      \ . '%#StatusLine#'
+      \ . ' %<' . l:filename . ' '
+      \ . l:flags
+      \ . '%='
+      \ . l:file_type . l:file_format
+      \ . hl
+      \ . l:cursor_format
+endfun
+
+" Select a full of relative path
+fun! StatusLinePath() abort
+   " Show a placeholder for netrw (file manager) directory listings
+   if &filetype ==? 'netrw'
+      return '*'
+   endif
+
+   " No filename
+   if empty(expand('%'))
+      return '[No Name]'
+   endif
+
+   let l:full = expand('%:p')
+   let l:relative = fnamemodify(l:full, ':.')
+
+   " Select the shorter representation from full and relative paths
+   if l:relative !=# l:full
+      let l:relative = './' . l:relative
+      return strdisplaywidth(l:relative) <= strdisplaywidth(l:full)
+            \ ? l:relative : l:full
+   endif
+
+   return l:full
+endfun
+
+" Shorten the displayed path to fit the active window
+fun! StatusLineFilename(maxwidth) abort
+   let l:path = StatusLinePath()
+   let l:limit = max([0, a:maxwidth])
+
+   " If the path fits - preserve all its directory names
+   if strdisplaywidth(l:path) <= l:limit
+      return l:path
+   endif
+
+   " Progressively shorten directories, keeping the full filename
+   for l:keep in [3, 2, 1]
+      let l:short = pathshorten(l:path, l:keep)
+
+      " Stop when an abbreviated directory path fits
+      if strdisplaywidth(l:short) <= l:limit
+         return l:short
+      endif
+   endfor
+
+   " Don't display a filename if the window has zero free columns
+   if l:limit == 0
+      return ''
+   endif
+
+   " Add prefix '...' to the path suffix
+   " In windows narrower than 3 columns, display only '.' or '..'.
+   let l:ellipsis = strpart('...', 0, min([3, l:limit]))
+   let l:suffix_width = l:limit - strdisplaywidth(l:ellipsis)
+   while strdisplaywidth(l:short) > l:suffix_width
+      let l:short = strcharpart(l:short, 1)
+   endwhile
+   return l:ellipsis . l:short
 endfun
 
 
@@ -92,11 +259,10 @@ endfun
 
 call <SID>StatusLineHighlights()
 
-" only set default statusline once on initial startup.
-" ignored on subsequent 'so $MYVIMRC' calls to prevent
-" active buffer statusline from being 'blurred'.
+" Only set the default statusline once on initial startup
+" Inactive windows retain the original compact statusline layout.
 if has('vim_starting')
-   let &statusline = ' %{StatusLineFilename()}%= %c | %p%% '
+   let &statusline = ' %<%{StatusLineFilename(max([0,winwidth(0)-12]))}%= %c | %p%% '
 endif
 
 
